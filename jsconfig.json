@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/*"]
+    },
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "target": "es2020",
+    "checkJs": false
+  },
+  "exclude": ["node_modules", "dist", "build"],
+  "include": ["src/**/*", "declarations.d.ts"]
+}
