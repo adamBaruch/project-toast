@@ -21,6 +21,21 @@ function ToastProvider({ children }) {
     setToasts(filteredToastsList);
   };
 
+  React.useEffect(() => {
+    const removeAllToasts = () => {
+      setToasts([]);
+    };
+
+    window.addEventListener("keydown", (event) => {
+      if (event.code === "Escape") {
+        removeAllToasts();
+      }
+    });
+    return () => {
+      window.removeEventListener("keydown", removeAllToasts);
+    };
+  }, []);
+
   const contextProps = {
     toasts,
     addToast,
