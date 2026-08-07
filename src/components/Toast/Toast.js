@@ -8,6 +8,7 @@ import {
 } from "react-feather";
 
 import VisuallyHidden from "../VisuallyHidden";
+import { ToastContext } from "../ToastProvider";
 
 import styles from "./Toast.module.css";
 
@@ -18,8 +19,23 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({ variant, handleDismiss = () => {}, toastId, children }) {
-  const Icon = ICONS_BY_VARIANT[variant];
+function Toast({ variant = "notice", toastId, children }) {
+  const Icon = ICONS_BY_VARIANT[variant] || Info;
+  const { removeToast, isAutoRemove, removeDuration } =
+    React.useContext(ToastContext);
+
+  React.useEffect(() => {
+    if (!isAutoRemove) return;
+
+    const timeoutId = setTimeout(() => {
+      removeToast(toastId);
+    }, removeDuration * 1000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [isAutoRemove, removeDuration, toastId, removeToast]);
+
   return (
     <div className={`${styles.toast} ${styles[variant]}`}>
       <div className={styles.iconContainer}>
@@ -31,12 +47,21 @@ function Toast({ variant, handleDismiss = () => {}, toastId, children }) {
       </p>
       <button
         className={styles.closeButton}
-        onClick={() => handleDismiss(toastId)}
+        onClick={() => removeToast(toastId)}
         aria-label="Dismiss message"
         aria-live="off"
       >
         <X size={24} />
       </button>
+
+      {isAutoRemove && (
+        <div className={styles.progressBarTrack}>
+          <div
+            className={styles.progressBarFill}
+            style={{ animationDuration: `${removeDuration}s` }}
+          />
+        </div>
+      )}
     </div>
   );
 }

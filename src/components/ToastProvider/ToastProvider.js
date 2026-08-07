@@ -5,34 +5,31 @@ function ToastProvider({ children }) {
   const [message, setMessage] = React.useState("");
   const [variant, setVariant] = React.useState("notice");
   const [toasts, setToasts] = React.useState([]);
+  const [isAutoRemove, setIsAutoRemove] = React.useState(false);
+  const [removeDuration, setRemoveDuration] = React.useState(3);
 
-  const addToast = () => {
+  const addToast = React.useCallback((toastMessage, toastVariant) => {
     const newToastInfo = {
-      message,
-      variant,
+      message: toastMessage,
+      variant: toastVariant,
       id: crypto.randomUUID(),
     };
-    const newToastsList = [...toasts, newToastInfo];
-    setToasts(newToastsList);
-  };
+    setToasts((currToasts) => [...currToasts, newToastInfo]);
+  }, []);
 
-  const removeToast = (toastId) => {
-    const filteredToastsList = toasts.filter((item) => item.id !== toastId);
-    setToasts(filteredToastsList);
-  };
+  const removeToast = React.useCallback((toastId) => {
+    setToasts((currToasts) => currToasts.filter((item) => item.id !== toastId));
+  }, []);
 
   React.useEffect(() => {
-    const removeAllToasts = () => {
-      setToasts([]);
-    };
-
-    window.addEventListener("keydown", (event) => {
+    const onEscKeydown = (event) => {
       if (event.code === "Escape") {
-        removeAllToasts();
+        setToasts([]);
       }
-    });
+    };
+    window.addEventListener("keydown", onEscKeydown);
     return () => {
-      window.removeEventListener("keydown", removeAllToasts);
+      window.removeEventListener("keydown", onEscKeydown);
     };
   }, []);
 
@@ -44,6 +41,10 @@ function ToastProvider({ children }) {
     setMessage,
     variant,
     setVariant,
+    isAutoRemove,
+    setIsAutoRemove,
+    removeDuration,
+    setRemoveDuration,
   };
 
   return (
