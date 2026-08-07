@@ -53,6 +53,15 @@ function Toast({ variant = "notice", toastId, children }) {
       >
         <X size={24} />
       </button>
+
+      {isAutoRemove && (
+        <div className={styles.progressBarTrack}>
+          <div
+            className={styles.progressBarFill}
+            style={{ animationDuration: `${removeDuration}s` }}
+          />
+        </div>
+      )}
     </div>
   );
 }
