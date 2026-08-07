@@ -16,19 +16,14 @@ function ToastPlayground() {
       variant,
       id: crypto.randomUUID(),
     };
-    const newToastsList = [...toasts];
-    newToastsList.push(newToastInfo);
+    const newToastsList = [...toasts, newToastInfo];
     setToasts(newToastsList);
   };
 
   const removeToast = (toastId) => {
-    console.log("removing " + toastId);
-
     const filteredToastsList = toasts.filter((item) => item.id !== toastId);
     setToasts(filteredToastsList);
   };
-
-  React.useEffect(() => {}, []);
 
   return (
     <div className={styles.wrapper}>
