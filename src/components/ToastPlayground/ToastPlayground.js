@@ -15,6 +15,10 @@ function ToastPlayground() {
     setMessage,
     variant,
     setVariant,
+    isAutoRemove,
+    setIsAutoRemove,
+    removeDuration,
+    setRemoveDuration,
   } = React.useContext(ToastContext);
 
   return (
@@ -69,9 +73,40 @@ function ToastPlayground() {
         </div>
 
         <div className={styles.row}>
+          <div className={styles.label}>Auto-Remove</div>
+          <div className={styles.radioWrapper}>
+            <input
+              type="checkbox"
+              name="autoRemove"
+              checked={isAutoRemove}
+              onChange={(event) => {
+                setIsAutoRemove(event.target.checked);
+              }}
+            />
+            <div className={styles.numberInputWrapper}>
+              <div
+                className={`${styles.label} ${!isAutoRemove && styles.disabled}`}
+              >
+                Duration
+              </div>
+              <input
+                type="number"
+                disabled={!isAutoRemove}
+                value={removeDuration}
+                onChange={(event) => {
+                  setRemoveDuration(event.target.value);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={addToast}>Pop Toast!</Button>
+            <Button onClick={() => addToast(message, variant)}>
+              Pop Toast!
+            </Button>
           </div>
         </div>
       </div>
